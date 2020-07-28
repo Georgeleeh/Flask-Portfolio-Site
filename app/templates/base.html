@@ -34,9 +34,11 @@
           <li><a href="{{ url_for('create') }}">Create Entry</a></li>
           <li><a href="{{ url_for('upload_image') }}">Upload Image</a></li>
           <li><a href="{{ url_for('image_gallery') }}">Image Gallery</a></li>
-          <li><a href="{{ url_for('logout') }}">Log out</a></li>
           {% endif %}
           {% block extra_header %}{% endblock %}
+          {% if session.logged_in %}
+          <li><a href="{{ url_for('logout') }}">Log out</a></li>
+          {% endif %}
         </ul>
         {% block search_bar %}
         <form action="{{ url_for('index') }}" class="navbar-form navbar-right" id="search-form" method="get" role="search">
@@ -58,6 +60,7 @@
     {% endfor %}
 
     {% block page_header %}
+    {% block feature_image %}{% endblock %}
     <div class="page-header">
       <h1>{% block content_title %}{% endblock %}</h1>
     </div>

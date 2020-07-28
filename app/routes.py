@@ -48,6 +48,7 @@ def index():
 def _create_or_edit(entry, template):
     if request.method == 'POST':
         entry.title = request.form.get('title') or ''
+        entry.feature_image = request.form.get('feature_image') or ''
         entry.content = request.form.get('content') or ''
         entry.published = True if request.form.get('published') == 'y' else False
         entry.slug = re.sub(r'[^\w]+', '-', entry.title.lower()).strip('-')
@@ -65,7 +66,7 @@ def _create_or_edit(entry, template):
             else:
                 return redirect(url_for('edit', slug=entry.slug))
 
-    return render_template(template, entry=entry)
+    return render_template(template, entry=entry, images=os.listdir(app.config['UPLOAD_FOLDER']))
 
 @app.route('/create/', methods=['GET', 'POST'])
 @login_required
