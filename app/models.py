@@ -1,4 +1,3 @@
-import re
 from datetime import datetime
 
 from markdown import markdown
@@ -17,8 +16,8 @@ class Entry(db.Model):
     id=db.Column(db.Integer,primary_key=True)
     title=db.Column(db.String(50),nullable=False)
     content=db.Column(db.Text,nullable=False)
-    feature_image=db.Column(db.String,nullable=False)
-    created_at=db.Column(db.DateTime, default=datetime.utcnow)
+    feature_image=db.Column(db.String,nullable=True)
+    timestamp=db.Column(db.DateTime, default=datetime.utcnow)
     slug = db.Column(db.String(50),nullable=False,unique=True)
     published = db.Column(db.Boolean,nullable=False)
 
@@ -51,6 +50,6 @@ class Entry(db.Model):
             'feature_image': self.feature_image,
             'created_at': self.created_at,
             # Generate a URL-friendly representation of the entry's title.
-            'slug': re.sub(r'[^\w]+', '-', self.title.lower()).strip('-'),
+            'slug': self.slug,
             'published': self.published
         }

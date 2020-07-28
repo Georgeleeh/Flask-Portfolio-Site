@@ -2,8 +2,7 @@ from app import app, db
 from app.models import Entry
 
 import functools
-
-from playhouse.flask_utils import get_object_or_404, object_list
+import re
 
 from flask import Flask, flash, Markup, redirect, render_template, request, Response, session, url_for
 
@@ -41,7 +40,7 @@ def logout():
 @app.route('/')
 def index():
     # TODO order list and query published posts
-    query = Entry.query.filter(Entry.published.is_(True)).all()
+    query = Entry.query.filter(Entry.published.is_(True)).order_by(Entry.timestamp.desc())
 
 
     return render_template('index.html', object_list=query)
@@ -50,23 +49,21 @@ def _create_or_edit(entry, template):
     if request.method == 'POST':
         entry.title = request.form.get('title') or ''
         entry.content = request.form.get('content') or ''
-        entry.published = request.form.get('published') or False
+        entry.published = True if request.form.get('published') == 'y' else False
+        entry.slug = re.sub(r'[^\w]+', '-', entry.title.lower()).strip('-')
         if not (entry.title and entry.content):
             flash('Title and Content are required.', 'danger')
         else:
-            # Wrap the call to save in a transaction so we can roll it back
-            # cleanly in the event of an integrity error.
-            try:
-                with db.atomic():
-                    entry.save()
-            except IntegrityError:
-                flash('Error: this title is already in use.', 'danger')
+
+            db.session.add(entry)
+
+            db.session.commit()
+
+            flash('Entry saved successfully.', 'success')
+            if entry.published:
+                return redirect(url_for('detail', slug=entry.slug))
             else:
-                flash('Entry saved successfully.', 'success')
-                if entry.published:
-                    return redirect(url_for('detail', slug=entry.slug))
-                else:
-                    return redirect(url_for('edit', slug=entry.slug))
+                return redirect(url_for('edit', slug=entry.slug))
 
     return render_template(template, entry=entry)
 
@@ -78,22 +75,18 @@ def create():
 @app.route('/drafts/')
 @login_required
 def drafts():
-    query = Entry.drafts().order_by(Entry.timestamp.desc())
-    return object_list('index.html', query, check_bounds=False)
+    query = Entry.query.filter(Entry.published.is_(False)).order_by(Entry.timestamp.desc())
+    return render_template('index.html', object_list=query)
 
 @app.route('/<slug>/')
 def detail(slug):
-    if session.get('logged_in'):
-        query = Entry.select()
-    else:
-        query = Entry.public()
-    entry = get_object_or_404(query, Entry.slug == slug)
+    entry = Entry.query.filter(Entry.slug.is_(slug)).first()
     return render_template('detail.html', entry=entry)
 
 @app.route('/<slug>/edit/', methods=['GET', 'POST'])
 @login_required
 def edit(slug):
-    entry = get_object_or_404(Entry, Entry.slug == slug)
+    entry = Entry.query.filter(Entry.slug.is_(slug)).first()
     return _create_or_edit(entry, 'edit.html')
 
 @app.template_filter('clean_querystring')
