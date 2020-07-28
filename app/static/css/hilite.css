@@ -45,3 +45,5 @@
 .highlight span.k { color: #00C0D1; }
 .highlight span.se { color: #DA96A3; }
 .highlight span.sd { color: #54F79C; }
+
+.highlight_tag { background: #04040000; color: #2c50c9; }
