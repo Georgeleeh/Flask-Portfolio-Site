@@ -1,24 +1,29 @@
 import re
-import datetime
+from datetime import datetime
 
 from markdown import markdown
 from markdown.extensions.codehilite import CodeHiliteExtension
 from markdown.extensions.extra import ExtraExtension
 from micawber import parse_html
 
-from playhouse.sqlite_ext import *
-
 from flask import Markup
 
-from app import app, flask_db, database, oembed_providers
+from app import app, db, oembed_providers
+
+from sqlalchemy import UniqueConstraint
 
 
-class Entry(flask_db.Model):
-    title = CharField()
-    slug = CharField(unique=True)
-    content = TextField()
-    published = BooleanField(index=True)
-    timestamp = DateTimeField(default=datetime.datetime.now, index=True)
+class Entry(db.Model):
+    id=db.Column(db.Integer,primary_key=True)
+    title=db.Column(db.String(50),nullable=False)
+    content=db.Column(db.Text,nullable=False)
+    feature_image=db.Column(db.String,nullable=False)
+    created_at=db.Column(db.DateTime, default=datetime.utcnow)
+    slug = db.Column(db.String(50),nullable=False,unique=True)
+    published = db.Column(db.Boolean,nullable=False)
+
+    def __repr__(self):
+        return f'<Entry {self.title}>'
 
     @property
     def html_content(self):
@@ -36,67 +41,16 @@ class Entry(flask_db.Model):
             urlize_all=True,
             maxwidth=app.config['SITE_WIDTH'])
         return Markup(oembed_content)
-
-    def save(self, *args, **kwargs):
-        # Generate a URL-friendly representation of the entry's title.
-        if not self.slug:
-            self.slug = re.sub(r'[^\w]+', '-', self.title.lower()).strip('-')
-        ret = super(Entry, self).save(*args, **kwargs)
-
-        # Store search content.
-        self.update_search_index()
-        return ret
-
-    def update_search_index(self):
-        # Create a row in the FTSEntry table with the post content. This will
-        # allow us to use SQLite's awesome full-text search extension to
-        # search our entries.
-        exists = (FTSEntry
-                  .select(FTSEntry.docid)
-                  .where(FTSEntry.docid == self.id)
-                  .exists())
-        content = '\n'.join((self.title, self.content))
-        if exists:
-            (FTSEntry
-             .update({FTSEntry.content: content})
-             .where(FTSEntry.docid == self.id)
-             .execute())
-        else:
-            FTSEntry.insert({
-                FTSEntry.docid: self.id,
-                FTSEntry.content: content}).execute()
-
-    @classmethod
-    def public(cls):
-        return Entry.select().where(Entry.published == True)
-
-    @classmethod
-    def drafts(cls):
-        return Entry.select().where(Entry.published == False)
-
-    @classmethod
-    def search(cls, query):
-        words = [word.strip() for word in query.split() if word.strip()]
-        if not words:
-            # Return an empty query.
-            return Entry.noop()
-        else:
-            search = ' '.join(words)
-
-        # Query the full-text search index for entries matching the given
-        # search query, then join the actual Entry data on the matching
-        # search result.
-        return (Entry
-                .select(Entry, FTSEntry.rank().alias('score'))
-                .join(FTSEntry, on=(Entry.id == FTSEntry.docid))
-                .where(
-                    FTSEntry.match(search) &
-                    (Entry.published == True))
-                .order_by(SQL('score')))
-
-
-class FTSEntry(FTSModel):
-    content = TextField()
-
-    class Meta:
-        database = database
+    
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'content': self.content,
+            'feature_image': self.feature_image,
+            'created_at': self.created_at,
+            # Generate a URL-friendly representation of the entry's title.
+            'slug': re.sub(r'[^\w]+', '-', self.title.lower()).strip('-'),
+            'published': self.published
+        }

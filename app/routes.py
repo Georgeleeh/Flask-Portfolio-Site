@@ -1,4 +1,4 @@
-from app import app, database
+from app import app, db
 from app.models import Entry
 
 import functools
@@ -40,21 +40,11 @@ def logout():
 
 @app.route('/')
 def index():
-    search_query = request.args.get('q')
-    if search_query:
-        query = Entry.search(search_query)
-    else:
-        query = Entry.public().order_by(Entry.timestamp.desc())
+    # TODO order list and query published posts
+    query = Entry.query.filter(Entry.published.is_(True)).all()
 
-    # The `object_list` helper will take a base query and then handle
-    # paginating the results if there are more than 20. For more info see
-    # the docs:
-    # http://docs.peewee-orm.com/en/latest/peewee/playhouse.html#object_list
-    return object_list(
-        'index.html',
-        query,
-        search=search_query,
-        check_bounds=False)
+
+    return render_template('index.html', object_list=query)
 
 def _create_or_edit(entry, template):
     if request.method == 'POST':
@@ -67,7 +57,7 @@ def _create_or_edit(entry, template):
             # Wrap the call to save in a transaction so we can roll it back
             # cleanly in the event of an integrity error.
             try:
-                with database.atomic():
+                with db.atomic():
                     entry.save()
             except IntegrityError:
                 flash('Error: this title is already in use.', 'danger')

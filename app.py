@@ -1,6 +1,6 @@
-from app import app, database
-from app.models import Entry, FTSEntry
+from app import app
+from app.models import Entry
 
 @app.shell_context_processor
 def make_shell_context():
-    return {'database': database, 'Entry': Entry, 'FTSEntry': FTSEntry}
+    return {'db': db, 'Entry': Entry}

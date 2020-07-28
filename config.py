@@ -1,4 +1,5 @@
 import os
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config(object):
     # The secret key is used internally by Flask to encrypt session data stored in cookies
@@ -8,8 +9,10 @@ class Config(object):
 
     APP_DIR = os.path.dirname(os.path.realpath(__file__))
 
-    # The playhouse.flask_utils.FlaskDB object accepts database URL configuration.
-    DATABASE = 'sqliteext:///%s' % os.path.join(APP_DIR, 'blog.db')
+    # DB
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
+        'sqlite:///' + os.path.join(basedir, 'app.db')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     DEBUG = True
 
