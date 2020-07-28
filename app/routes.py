@@ -43,11 +43,9 @@ def logout():
 @app.route('/')
 def index():
     query = Entry.query.filter(Entry.published.is_(True)).order_by(Entry.timestamp.desc())
-    return render_template('index.html', object_list=query, len=query.count())
+    return render_template('index.html', object_list=query)
 
 def _create_or_edit(entry, template):
-    print(entry.tags)
-
     if request.method == 'POST':
         entry.title = request.form.get('title') or ''
         entry.feature_image = request.form.get('feature_image') or ''
