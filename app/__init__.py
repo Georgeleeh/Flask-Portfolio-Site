@@ -25,3 +25,4 @@ oembed_providers = bootstrap_basic(OEmbedCache())
 from app import routes
 from app.models import Entry, FTSEntry
 
+database.create_tables([Entry, FTSEntry], safe=True)
