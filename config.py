@@ -18,4 +18,9 @@ class Config(object):
 
     # This is used by micawber, which will attempt to generate rich media
     # embedded objects with maxwidth=800.
-    SITE_WIDTH = 800
+    SITE_WIDTH = 1000
+
+    # File Upload
+    # TODO clean up this file path?
+    UPLOAD_FOLDER = 'C:/Users/George/Documents/04 Georgeleeh.com/blog/app/static/images/uploads'
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}

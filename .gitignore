@@ -3,3 +3,4 @@ __*/
 venv/
 *.db
 migrations/
+app/static/images/uploads/

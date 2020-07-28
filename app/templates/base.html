@@ -32,6 +32,7 @@
           {% if session.logged_in %}
           <li><a href="{{ url_for('drafts') }}">Drafts</a></li>
           <li><a href="{{ url_for('create') }}">Create Entry</a></li>
+          <li><a href="{{ url_for('upload_image') }}">Upload Image</a></li>
           <li><a href="{{ url_for('logout') }}">Log out</a></li>
           {% endif %}
           {% block extra_header %}{% endblock %}

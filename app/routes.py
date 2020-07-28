@@ -3,8 +3,10 @@ from app.models import Entry
 
 import functools
 import re
+import os
 
 from flask import Flask, flash, Markup, redirect, render_template, request, Response, session, url_for
+from werkzeug.utils import secure_filename
 
 def login_required(fn):
     @functools.wraps(fn)
@@ -85,6 +87,32 @@ def detail(slug):
 def edit(slug):
     entry = Entry.query.filter(Entry.slug.is_(slug)).first()
     return _create_or_edit(entry, 'edit.html')
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+@app.route('/upload-image/', methods=['GET', 'POST'])
+@login_required
+def upload_image():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part.', 'danger')
+            return redirect(request.url)
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file,', 'danger')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            flash('Image uploaded successfully.', 'success')
+            return redirect(url_for('index'))
+    return render_template('upload_image.html')
+
 
 @app.errorhandler(404)
 def not_found(exc):
