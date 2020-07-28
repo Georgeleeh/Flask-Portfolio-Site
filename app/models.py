@@ -1,15 +1,14 @@
 from datetime import datetime
 
+from micawber import parse_html
+from sqlalchemy import UniqueConstraint
 from markdown import markdown
 from markdown.extensions.codehilite import CodeHiliteExtension
 from markdown.extensions.extra import ExtraExtension
-from micawber import parse_html
 
 from flask import Markup
 
 from app import app, db, oembed_providers
-
-from sqlalchemy import UniqueConstraint
 
 
 class Entry(db.Model):

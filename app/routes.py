@@ -1,12 +1,13 @@
+import os
+import re
+import functools
+
 from app import app, db
 from app.models import Entry
 
-import functools
-import re
-import os
-
-from flask import Flask, flash, Markup, redirect, render_template, request, Response, session, url_for
 from werkzeug.utils import secure_filename
+from flask import Flask, flash, Markup, redirect, render_template, request, Response, session, url_for
+
 
 def login_required(fn):
     @functools.wraps(fn)

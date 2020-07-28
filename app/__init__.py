@@ -4,8 +4,8 @@ from config import Config
 from micawber import bootstrap_basic
 from micawber.cache import Cache as OEmbedCache
 
-from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
 
 
 app = Flask(__name__)
