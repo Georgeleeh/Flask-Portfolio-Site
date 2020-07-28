@@ -21,6 +21,5 @@ class Config(object):
     SITE_WIDTH = 800
 
     # File Upload
-    # TODO clean up this file path?
-    UPLOAD_FOLDER = 'C:/Users/George/Documents/04 Georgeleeh.com/blog/app/static/images/uploads'
+    UPLOAD_FOLDER = 'app/static/images/uploads/'
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
