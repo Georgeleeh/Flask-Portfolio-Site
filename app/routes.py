@@ -39,10 +39,7 @@ def logout():
 
 @app.route('/')
 def index():
-    # TODO order list and query published posts
     query = Entry.query.filter(Entry.published.is_(True)).order_by(Entry.timestamp.desc())
-
-
     return render_template('index.html', object_list=query)
 
 def _create_or_edit(entry, template):
