@@ -6,7 +6,7 @@ from app import app, db
 from app.models import Entry
 
 from werkzeug.utils import secure_filename
-from flask import Flask, flash, Markup, redirect, render_template, request, Response, session, url_for
+from flask import Flask, flash, Markup, redirect, render_template, request, Response, session, url_for, send_from_directory
 
 
 def login_required(fn):
@@ -113,6 +113,12 @@ def upload_image():
             flash('Image uploaded successfully.', 'success')
             return redirect(url_for('index'))
     return render_template('upload_image.html')
+
+@app.route('/image-gallery/')
+@login_required
+def image_gallery():
+    images = os.listdir(app.config['UPLOAD_FOLDER'])
+    return render_template('image_gallery.html', images=images)
 
 
 @app.errorhandler(404)
