@@ -86,19 +86,6 @@ def edit(slug):
     entry = Entry.query.filter(Entry.slug.is_(slug)).first()
     return _create_or_edit(entry, 'edit.html')
 
-@app.template_filter('clean_querystring')
-def clean_querystring(request_args, *keys_to_remove, **new_values):
-    # We'll use this template filter in the pagination include. This filter
-    # will take the current URL and allow us to preserve the arguments in the
-    # querystring while replacing any that we need to overwrite. For instance
-    # if your URL is /?q=search+query&page=2 and we want to preserve the search
-    # term but make a link to page 3, this filter will allow us to do that.
-    querystring = dict((key, value) for key, value in request_args.items())
-    for key in keys_to_remove:
-        querystring.pop(key, None)
-    querystring.update(new_values)
-    return urllib.urlencode(querystring)
-
 @app.errorhandler(404)
 def not_found(exc):
     return Response('<h3>Not found</h3>'), 404
