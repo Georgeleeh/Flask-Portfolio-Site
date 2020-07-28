@@ -18,7 +18,7 @@ class Config(object):
 
     # This is used by micawber, which will attempt to generate rich media
     # embedded objects with maxwidth=800.
-    SITE_WIDTH = 1000
+    SITE_WIDTH = 800
 
     # File Upload
     # TODO clean up this file path?
