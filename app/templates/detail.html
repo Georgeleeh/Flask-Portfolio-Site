@@ -13,6 +13,7 @@
 {% endblock %}
 
 {% block content %}
+  {{ ', '.join(tags) }}
   <p>Created {{ entry.timestamp.strftime('%d/%m/%Y at %H:%M') }}</p>
   {{ entry.html_content }}
 {% endblock %}

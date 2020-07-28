@@ -11,6 +11,22 @@ from flask import Markup
 from app import app, db, oembed_providers
 
 
+tag_entry = db.Table('tag_entry',
+    db.Column('tag_id',db.Integer,db.ForeignKey('tag.id'), primary_key=True),
+    db.Column('entry_id', db.Integer,db.ForeignKey('entry.id'),primary_key=True)
+)
+
+class Tag(db.Model):
+    id=db.Column(db.Integer,primary_key=True)
+    name=db.Column(db.String(20))
+
+    @property
+    def serialize(self):
+        return {
+        'id': self.id,
+        'name': self.name     
+        }
+
 class Entry(db.Model):
     id=db.Column(db.Integer,primary_key=True)
     title=db.Column(db.String(50),nullable=False)
@@ -19,6 +35,8 @@ class Entry(db.Model):
     timestamp=db.Column(db.DateTime, default=datetime.utcnow)
     slug = db.Column(db.String(50),nullable=False,unique=True)
     published = db.Column(db.Boolean,nullable=False)
+
+    tags=db.relationship('Tag',secondary=tag_entry,backref=db.backref('entries_associated',lazy="dynamic"))
 
     def __repr__(self):
         return f'<Entry {self.title}>'

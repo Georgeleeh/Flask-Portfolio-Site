@@ -3,7 +3,7 @@ import re
 import functools
 
 from app import app, db
-from app.models import Entry
+from app.models import Entry, Tag
 
 from werkzeug.utils import secure_filename
 from flask import Flask, flash, Markup, redirect, render_template, request, Response, session, url_for, send_from_directory
@@ -46,12 +46,29 @@ def index():
     return render_template('index.html', object_list=query)
 
 def _create_or_edit(entry, template):
+    print(entry.tags)
+
     if request.method == 'POST':
         entry.title = request.form.get('title') or ''
         entry.feature_image = request.form.get('feature_image') or ''
         entry.content = request.form.get('content') or ''
         entry.published = True if request.form.get('published') == 'y' else False
         entry.slug = re.sub(r'[^\w]+', '-', entry.title.lower()).strip('-')
+
+        for tag in entry.tags:
+            if entry in tag.entries_associated.all():
+                tag.entries_associated.remove(entry)
+
+        for tag in request.form.get('tags').split(','):
+            present_tag=Tag.query.filter_by(name=tag).first()
+            if(present_tag):
+                if entry not in present_tag.entries_associated.all():
+                    present_tag.entries_associated.append(entry)
+            else:
+                new_tag=Tag(name=tag)
+                new_tag.entries_associated.append(entry)
+                db.session.add(new_tag)
+
         if not (entry.title and entry.content):
             flash('Title and Content are required.', 'danger')
         else:
@@ -66,7 +83,7 @@ def _create_or_edit(entry, template):
             else:
                 return redirect(url_for('edit', slug=entry.slug))
 
-    return render_template(template, entry=entry, images=os.listdir(app.config['UPLOAD_FOLDER']))
+    return render_template(template, entry=entry, tags=[tag.name for tag in entry.tags], images=os.listdir(app.config['UPLOAD_FOLDER']))
 
 @app.route('/create/', methods=['GET', 'POST'])
 @login_required
@@ -82,7 +99,8 @@ def drafts():
 @app.route('/<slug>/')
 def detail(slug):
     entry = Entry.query.filter(Entry.slug.is_(slug)).first()
-    return render_template('detail.html', entry=entry)
+    print([tag.name for tag in entry.tags])
+    return render_template('detail.html', entry=entry, tags=[tag.name for tag in entry.tags])
 
 @app.route('/<slug>/edit/', methods=['GET', 'POST'])
 @login_required
