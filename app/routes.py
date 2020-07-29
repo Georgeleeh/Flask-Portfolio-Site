@@ -58,14 +58,20 @@ def _create_or_edit(entry, template):
                 tag.entries_associated.remove(entry)
 
         for tag in request.form.get('tags').split(','):
-            present_tag=Tag.query.filter_by(name=tag).first()
-            if(present_tag):
-                if entry not in present_tag.entries_associated.all():
-                    present_tag.entries_associated.append(entry)
+            # clean string to avoid accidental duplication
+            tag = tag.strip()
+            if tag == '':
+                pass
             else:
-                new_tag=Tag(name=tag)
-                new_tag.entries_associated.append(entry)
-                db.session.add(new_tag)
+                # check if tag exists
+                present_tag=Tag.query.filter_by(name=tag).first()
+                if(present_tag):
+                    if entry not in present_tag.entries_associated.all():
+                        present_tag.entries_associated.append(entry)
+                else:
+                    new_tag=Tag(name=tag)
+                    new_tag.entries_associated.append(entry)
+                    db.session.add(new_tag)
 
         if not (entry.title and entry.content):
             flash('Title and Content are required.', 'danger')
@@ -97,7 +103,6 @@ def drafts():
 @app.route('/<slug>/')
 def detail(slug):
     entry = Entry.query.filter(Entry.slug.is_(slug)).first()
-    print([tag.name for tag in entry.tags])
     return render_template('detail.html', entry=entry, tags=[tag.name for tag in entry.tags])
 
 @app.route('/<slug>/edit/', methods=['GET', 'POST'])
