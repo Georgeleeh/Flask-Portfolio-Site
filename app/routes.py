@@ -46,8 +46,21 @@ def index():
 
 @app.route('/blog/')
 def blog():
+    search_query = request.args.get('q')
+    if search_query:
+        found_tag = Tag.query.filter(Tag.name.like(search_query)).first()
+        found_entries = found_tag.entries_associated.all()
+        return render_template('blog.html', entry_list=found_entries)
+
     query = Entry.query.filter(Entry.published.is_(True)).order_by(Entry.timestamp.desc())
     return render_template('blog.html', entry_list=query)
+
+@app.route('/blog/tags/<tag>')
+def tags(tag):
+    found_tag = Tag.query.filter(Tag.name.like(tag)).first()
+    found_entries = found_tag.entries_associated.all()
+    return render_template('blog.html', entry_list=found_entries)
+
 
 def _create_or_edit(entry, template):
     if request.method == 'POST':

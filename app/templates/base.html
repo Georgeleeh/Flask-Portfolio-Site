@@ -18,48 +18,50 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="{{ url_for('index') }}">George Harris</a>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="{{ url_for('index') }}">George Harris</a>
 
-      <header>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      </header>
+    <header>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </header>
 
-      <div class="navbar-collapse collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('blog') }}">Blog</a>
-          </li>
-          {% if session.logged_in %}
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('drafts') }}">Drafts</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('create') }}">Create Entry</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              Images
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="{{ url_for('image_gallery') }}">Image Gallery</a>
-              <a class="dropdown-item" href="{{ url_for('upload_image') }}">Upload Image</a>
-            </div>
-          </li>
-          {% endif %}
-
-          {% block extra_navbar_link %}{% endblock %}
-        </ul>
-
+    <div class="navbar-collapse collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('blog') }}">Blog</a>
+        </li>
         {% if session.logged_in %}
-        <a class="nav-link navbar-right fg-white" href="{{ url_for('logout') }}">Log out</a>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('drafts') }}">Drafts</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('create') }}">Create Entry</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Images
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="{{ url_for('image_gallery') }}">Image Gallery</a>
+            <a class="dropdown-item" href="{{ url_for('upload_image') }}">Upload Image</a>
+          </div>
+        </li>
         {% endif %}
-      </div>
-    </nav>
+
+        {% block extra_navbar_link %}{% endblock %}
+      </ul>
+
+      {% block extra_navbar_content %}{% endblock %}
+
+      {% if session.logged_in %}
+      <a class="nav-link navbar-right fg-white" href="{{ url_for('logout') }}">Log out</a>
+      {% endif %}
+    </div>
+  </nav>
 
   <div class="container" style="padding-top: 1em;">
     {% for category, message in get_flashed_messages(with_categories=true) %}
