@@ -2,8 +2,9 @@
 
 {% block title %}{{ entry.title }}{% endblock %}
 
-{% block feature_image %}<img class="img-responsive" src="{{ entry.feature_image }}"
-  alt="{{ entry.feature_image }}">{% endblock %}
+{% block feature_image %}
+<img class="img-fluid" src="{{ entry.feature_image }}" alt="{{ entry.feature_image }}">
+{% endblock %}
 
 {% block content_title %}{{ entry.title }}{% endblock %}
 

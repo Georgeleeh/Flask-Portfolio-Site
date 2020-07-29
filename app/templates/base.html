@@ -18,47 +18,47 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="{{ url_for('index') }}">George Harris</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="{{ url_for('index') }}">George Harris</a>
 
-    <header>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-    </header>
+      <header>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </header>
 
-    <div class="navbar-collapse collapse" id="navbarNavDropdown">
-      <ul class="navbar-nav mr-auto">
+      <div class="navbar-collapse collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav mr-auto">
+          {% if session.logged_in %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('drafts') }}">Drafts</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('create') }}">Create Entry</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              Images
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="{{ url_for('image_gallery') }}">Image Gallery</a>
+              <a class="dropdown-item" href="{{ url_for('upload_image') }}">Upload Image</a>
+            </div>
+          </li>
+          {% endif %}
+
+          {% block extra_navbar_link %}{% endblock %}
+        </ul>
+
         {% if session.logged_in %}
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('drafts') }}">Drafts</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('create') }}">Create Entry</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            Images
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="{{ url_for('image_gallery') }}">Image Gallery</a>
-            <a class="dropdown-item" href="{{ url_for('upload_image') }}">Upload Image</a>
-          </div>
-        </li>
+        <a class="nav-link navbar-right fg-white" href="{{ url_for('logout') }}">Log out</a>
         {% endif %}
+      </div>
+    </nav>
 
-        {% block extra_navbar_link %}{% endblock %}
-      </ul>
-
-      {% if session.logged_in %}
-      <a class="nav-link navbar-right fg-white" href="{{ url_for('logout') }}">Log out</a>
-      {% endif %}
-    </div>
-  </nav>
-
-  <div class="container">
+  <div class="container" style="padding-top: 1em;">
     {% for category, message in get_flashed_messages(with_categories=true) %}
     <div class="alert alert-{{ category }} alert-dismissable">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -67,8 +67,10 @@
     {% endfor %}
 
     {% block page_header %}
-    {% block feature_image %}{% endblock %}
-    <div class="page-header" style="padding-top: 3em;">
+    <div class="container col-md-3" style="padding-top: 1em;">
+      {% block feature_image %}{% endblock %}
+    </div>
+    <div class="page-header">
       <h1>{% block content_title %}{% endblock %}</h1>
       <hr />
     </div>
