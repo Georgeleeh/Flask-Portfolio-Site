@@ -2,18 +2,21 @@
 
 {% block title %}{{ entry.title }}{% endblock %}
 
-{% block feature_image %}<img class="img-responsive" src="{{ entry.feature_image }}" alt="{{ entry.feature_image }}">{% endblock %}
+{% block feature_image %}<img class="img-responsive" src="{{ entry.feature_image }}"
+  alt="{{ entry.feature_image }}">{% endblock %}
 
 {% block content_title %}{{ entry.title }}{% endblock %}
 
-{% block extra_header %}
-  {% if session.logged_in %}
-    <li><a href="{{ url_for('edit', slug=entry.slug) }}">Edit entry</a></li>
-  {% endif %}
+{% block extra_navbar_link %}
+{% if session.logged_in %}
+<li class="nav-item">
+  <a class="nav-link" href="{{ url_for('edit', slug=entry.slug) }}">Edit entry</a>
+</li>
+{% endif %}
 {% endblock %}
 
 {% block content %}
-  {{ ', '.join(tags) }}
-  <p>Created {{ entry.timestamp.strftime('%d/%m/%Y at %H:%M') }}</p>
-  {{ entry.html_content }}
+{{ ', '.join(tags) }}
+<p>Created {{ entry.timestamp.strftime('%d/%m/%Y at %H:%M') }}</p>
+{{ entry.html_content }}
 {% endblock %}
