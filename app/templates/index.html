@@ -24,12 +24,12 @@
   </div>
   <div class="col-sm-3">
     <p>
-      {% for t in entry.tags %}
-      {% if t != entry.tags[-1] %}
-      <span class="highlight_tag">{{ t.name }},</tag>
-        {% endif %}
-        {% endfor %}
-        <span class="highlight_tag">{{ entry.tags[-1].name }}</tag>
+      {% for tag in entry.tags %}
+      <a href='#'>{{ tag.name }}</a>
+      {% if not loop.last %}
+      ,
+      {% endif %}
+      {% endfor %}
     </p>
   </div>
 </div>
