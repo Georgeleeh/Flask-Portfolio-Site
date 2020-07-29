@@ -47,25 +47,14 @@
             <a class="dropdown-item" href="{{ url_for('upload_image') }}">Upload Image</a>
           </div>
         </li>
-
-
         {% endif %}
+
         {% block extra_navbar_link %}{% endblock %}
-        {% if session.logged_in %}
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('logout') }}">Log out</a>
-        </li>
-        {% endif %}
       </ul>
-      {% block search_bar %}
-      <form action="{{ url_for('index') }}" class="navbar-form navbar-right" id="search-form" method="get"
-        role="search">
-        <div class="form-group">
-          <input class="form-control" name="q" placeholder="Search" type="text"
-            value="{% if search %}{{ search }}{% endif %}">
-        </div>
-      </form>
-      {% endblock %}
+
+      {% if session.logged_in %}
+      <a class="nav-link navbar-right fg-white" href="{{ url_for('logout') }}">Log out</a>
+      {% endif %}
     </div>
   </nav>
 
@@ -79,14 +68,15 @@
 
     {% block page_header %}
     {% block feature_image %}{% endblock %}
-    <div class="page-header">
+    <div class="page-header" style="padding-top: 3em;">
       <h1>{% block content_title %}{% endblock %}</h1>
+      <hr />
     </div>
     {% endblock %}
 
     {% block content %}{% endblock %}
 
-    <footer>
+    <footer style="padding-top: 2em;">
       <hr />
       <a href="{{ url_for('login') }}">Admin Login</a>
       <p>George Harris &copy; 2020</p>
