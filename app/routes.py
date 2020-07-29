@@ -42,8 +42,12 @@ def logout():
 
 @app.route('/')
 def index():
+    return render_template('index.html')
+
+@app.route('/blog/')
+def blog():
     query = Entry.query.filter(Entry.published.is_(True)).order_by(Entry.timestamp.desc())
-    return render_template('index.html', object_list=query)
+    return render_template('blog.html', entry_list=query)
 
 def _create_or_edit(entry, template):
     if request.method == 'POST':
@@ -98,7 +102,7 @@ def create():
 @login_required
 def drafts():
     query = Entry.query.filter(Entry.published.is_(False)).order_by(Entry.timestamp.desc())
-    return render_template('index.html', object_list=query)
+    return render_template('blog.html', object_list=query)
 
 @app.route('/<slug>/')
 def detail(slug):

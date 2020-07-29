@@ -1,39 +1,5 @@
 {% extends "base.html" %}
 
-{% block title %}Blog entries{% endblock %}
+{% block title %}Home{% endblock %}
 
-{% block content_title %}{% if search %}Search "{{ search }}"{% else %}Blog entries{% endif %}{% endblock %}
-
-{% block content %}
-{% for entry in object_list %}
-<div class="row" style="padding-top: 2em;">
-  <div class="col-sm-3">
-    <a
-      href="{% if entry.published %}{{ url_for('detail', slug=entry.slug) }}{% else %}{{ url_for('edit', slug=entry.slug) }}{% endif %}">
-      <img class="rounded img-thumbnail" src="{{ entry.feature_image }}" alt="{{ entry.feature_image }}">
-    </a>
-  </div>
-  <div class="col-sm-6">
-    <h3>
-      <a
-        href="{% if entry.published %}{{ url_for('detail', slug=entry.slug) }}{% else %}{{ url_for('edit', slug=entry.slug) }}{% endif %}">
-        {{ entry.title }}
-      </a>
-    </h3>
-    <p>Created {{ entry.timestamp.strftime('%d/%m/%Y at %H:%M') }}</p>
-  </div>
-  <div class="col-sm-3">
-    <p>
-      {% for tag in entry.tags %}
-      <a href='#'>{{ tag.name }}</a>
-      {% if not loop.last %}
-      ,
-      {% endif %}
-      {% endfor %}
-    </p>
-  </div>
-</div>
-{% else %}
-<p>No entries have been created yet.</p>
-{% endfor %}
-{% endblock %}
+{% block content_title %}Welcome{% endblock %}
