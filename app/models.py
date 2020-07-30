@@ -35,6 +35,7 @@ class Entry(db.Model):
     timestamp=db.Column(db.DateTime, default=datetime.utcnow)
     slug = db.Column(db.String(50),nullable=False,unique=True)
     published = db.Column(db.Boolean,nullable=False)
+    featured = db.Column(db.Boolean,nullable=False)
 
     tags=db.relationship('Tag',secondary=tag_entry,backref=db.backref('entries_associated',lazy="dynamic"))
 

@@ -68,6 +68,7 @@ def _create_or_edit(entry, template):
         entry.feature_image = request.form.get('feature_image') or ''
         entry.content = request.form.get('content') or ''
         entry.published = True if request.form.get('published') == 'y' else False
+        entry.featured = True if request.form.get('featured') == 'y' else False
         entry.slug = re.sub(r'[^\w]+', '-', entry.title.lower()).strip('-')
 
         for tag in entry.tags:
