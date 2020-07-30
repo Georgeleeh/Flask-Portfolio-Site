@@ -13,46 +13,46 @@
     <hr />
 </div>
 
-<div class="row">
-    {% for i in range(len) %}
-    <div class="col">
-        <a href="{{ url_for('detail', slug=featured[i].slug) }}">
-            <img class="rounded img-thumbnail" src="{{ featured[i].feature_image }}"
-                alt="{{ featured[i].feature_image }}">
-        </a>
-    </div>
-    {% endfor %}
-</div>
-
-<div class="row">
-    {% for i in range(len) %}
-    <div class="col">
-        <h4 class="text-center">
-            <a
-                href="{{ url_for('detail', slug=featured[i].slug) }}">
-                {{ featured[i].title }}
+<div class="container-fluid"  style="height: 200px;">
+    <div class="row">
+        {% for i in range(len) %}
+        <div class="col text-center">
+            <a href="{{ url_for('detail', slug=featured[i].slug) }}">
+                <img class="rounded img-fluid" style="height: 150px;" src="{{ featured[i].feature_image }}"
+                    alt="{{ featured[i].feature_image }}">
             </a>
-        </h4>
-        <p class="text-center">Created {{ featured[i].timestamp.strftime('%d/%m/%Y at %H:%M') }}</p>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
 
-<div class="row">
-    {% for i in range(len) %}
-    <div class="col">
-        <p class="text-center">
-            {% for tag in featured[i].tags %}
-            <a href="{{ url_for('tags', tag=tag.name ) }}">{{ tag.name }}</a>
-            {% if not loop.last %}
-            ,
-            {% endif %}
-            {% endfor %}
-        </p>
+    <div class="row">
+        {% for i in range(len) %}
+        <div class="col">
+            <h4 class="text-center">
+                <a href="{{ url_for('detail', slug=featured[i].slug) }}">
+                    {{ featured[i].title }}
+                </a>
+            </h4>
+            <p class="text-center">Created {{ featured[i].timestamp.strftime('%d/%m/%Y at %H:%M') }}</p>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
 
+    <div class="row">
+        {% for i in range(len) %}
+        <div class="col">
+            <p class="text-center">
+                {% for tag in featured[i].tags %}
+                <a href="{{ url_for('tags', tag=tag.name ) }}">{{ tag.name }}</a>
+                {% if not loop.last %}
+                ,
+                {% endif %}
+                {% endfor %}
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 {% else %}
 <p>No entries have been created yet.</p>
 {% endif %}
