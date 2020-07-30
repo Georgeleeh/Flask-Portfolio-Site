@@ -42,7 +42,12 @@ def logout():
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    featured_entries = Entry.query.filter(Entry.featured.is_(True)).order_by(Entry.timestamp.desc()).all()[:3]
+    print(len(featured_entries))
+    if len(featured_entries) > 0:
+        return render_template('index.html', featured=featured_entries, len=len(featured_entries))
+    else:
+        return render_template('index.html')
 
 @app.route('/blog/')
 def blog():
