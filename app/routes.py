@@ -50,7 +50,11 @@ def blog():
     if search_query:
         found_tag = Tag.query.filter(Tag.name.like(search_query)).first()
         found_entries = found_tag.entries_associated.all()
-        return render_template('blog.html', entry_list=found_entries)
+        if session.get('logged_in'):
+            return render_template('blog.html', entry_list=found_entries)
+        else:
+            found_published_entries = [entry for entry in found_entries if entry.published]
+            return render_template('blog.html', entry_list=found_published_entries)
 
     query = Entry.query.filter(Entry.published.is_(True)).order_by(Entry.timestamp.desc())
     return render_template('blog.html', entry_list=query)
@@ -59,7 +63,11 @@ def blog():
 def tags(tag):
     found_tag = Tag.query.filter(Tag.name.like(tag)).first()
     found_entries = found_tag.entries_associated.all()
-    return render_template('blog.html', entry_list=found_entries)
+    if session.get('logged_in'):
+        return render_template('blog.html', entry_list=found_entries)
+    else:
+        found_published_entries = [entry for entry in found_entries if entry.published]
+        return render_template('blog.html', entry_list=found_published_entries)
 
 
 def _create_or_edit(entry, template):
@@ -116,7 +124,7 @@ def create():
 @login_required
 def drafts():
     query = Entry.query.filter(Entry.published.is_(False)).order_by(Entry.timestamp.desc())
-    return render_template('blog.html', object_list=query)
+    return render_template('blog.html', entry_list=query)
 
 @app.route('/<slug>/')
 def detail(slug):
