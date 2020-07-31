@@ -18,7 +18,7 @@
       <select class="form-control" id="feature_image" name="feature_image" type="text" value="{{ entry.title }}">
         <option value=''>None</option>
         {% for image in images %}
-        <option {% if entry.feature_image.split("/")[-1] == image %} selected {% endif %} value="/static/images/uploads/{{ image }}">{{ image }}</option>
+        <option {% if entry.feature_image %}{% if entry.feature_image.split("/")[-1] == image %} selected {% endif %} value="/static/images/uploads/{{ image }}">{{ image }}</option>
         {% endfor %}
       </select>
     </div>
