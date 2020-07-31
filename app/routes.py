@@ -67,7 +67,12 @@ def blog():
 @app.route('/blog/tags/<tag>')
 def tags(tag):
     found_tag = Tag.query.filter(Tag.name.like(tag)).first()
+
+    if found_tag is None:
+        return render_template('blog.html')
+
     found_entries = found_tag.entries_associated.all()
+
     if session.get('logged_in'):
         return render_template('blog.html', entry_list=found_entries)
     else:
