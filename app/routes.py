@@ -43,7 +43,7 @@ def logout():
 @app.route('/')
 def index():
     featured_entries = Entry.query.filter(Entry.featured.is_(True)).order_by(Entry.timestamp.desc()).all()[:3]
-    print(len(featured_entries))
+
     if len(featured_entries) > 0:
         return render_template('index.html', featured=featured_entries, len=len(featured_entries))
     else:
@@ -82,46 +82,59 @@ def tags(tag):
 
 def _create_or_edit(entry, template):
     if request.method == 'POST':
-        entry.title = request.form.get('title') or ''
-        entry.feature_image = request.form.get('feature_image') or ''
-        entry.content = request.form.get('content') or ''
-        entry.published = True if request.form.get('published') == 'y' else False
-        entry.featured = True if request.form.get('featured') == 'y' else False
-        entry.slug = re.sub(r'[^\w]+', '-', entry.title.lower()).strip('-')
+        button_value = request.form.get('button')
+        if button_value == 'save':
+            entry.title = request.form.get('title') or ''
+            entry.feature_image = request.form.get('feature_image') or ''
+            entry.content = request.form.get('content') or ''
+            entry.published = True if request.form.get('published') == 'y' else False
+            entry.featured = True if request.form.get('featured') == 'y' else False
+            entry.slug = re.sub(r'[^\w]+', '-', entry.title.lower()).strip('-')
 
-        for tag in entry.tags:
-            if entry in tag.entries_associated.all():
-                tag.entries_associated.remove(entry)
+            for tag in entry.tags:
+                if entry in tag.entries_associated.all():
+                    tag.entries_associated.remove(entry)
 
-        for tag in request.form.get('tags').split(','):
-            # clean string to avoid accidental duplication
-            tag = tag.strip()
-            if tag == '':
-                pass
-            else:
-                # check if tag exists
-                present_tag=Tag.query.filter_by(name=tag).first()
-                if(present_tag):
-                    if entry not in present_tag.entries_associated.all():
-                        present_tag.entries_associated.append(entry)
+            for tag in request.form.get('tags').split(','):
+                # clean string to avoid accidental duplication
+                tag = tag.strip()
+                if tag == '':
+                    pass
                 else:
-                    new_tag=Tag(name=tag)
-                    new_tag.entries_associated.append(entry)
-                    db.session.add(new_tag)
+                    # check if tag exists
+                    present_tag=Tag.query.filter_by(name=tag).first()
+                    if(present_tag):
+                        if entry not in present_tag.entries_associated.all():
+                            present_tag.entries_associated.append(entry)
+                    else:
+                        new_tag=Tag(name=tag)
+                        new_tag.entries_associated.append(entry)
+                        db.session.add(new_tag)
 
-        if not (entry.title and entry.content):
-            flash('Title and Content are required.', 'danger')
-        else:
-
-            db.session.add(entry)
-
-            db.session.commit()
-
-            flash('Entry saved successfully.', 'success')
-            if entry.published:
-                return redirect(url_for('detail', slug=entry.slug))
+            if not (entry.title and entry.content):
+                flash('Title and Content are required.', 'danger')
             else:
-                return redirect(url_for('edit', slug=entry.slug))
+
+                db.session.add(entry)
+
+                db.session.commit()
+
+                flash('Entry saved successfully.', 'success')
+                if entry.published:
+                    return redirect(url_for('detail', slug=entry.slug))
+                else:
+                    return redirect(url_for('edit', slug=entry.slug))
+
+        elif button_value == 'delete':
+            for tag in entry.tags:
+                if entry in tag.entries_associated.all():
+                    tag.entries_associated.remove(entry)
+            
+            db.session.delete(entry)
+            db.session.commit()
+            flash('Entry deleted.', 'danger')
+            return redirect(url_for('index'))
+
 
     return render_template(template, entry=entry, tags=[tag.name for tag in entry.tags], images=os.listdir(app.config['UPLOAD_FOLDER']))
 

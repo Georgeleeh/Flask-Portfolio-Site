@@ -7,3 +7,5 @@
 {% block form_action %}{{ url_for('edit', slug=entry.slug) }}{% endblock %}
 
 {% block save_button %}Save changes{% endblock %}
+
+{% block delete_button %}<button class="btn btn-danger" name="button" type="submit" value="delete">Delete</button>{% endblock %}
