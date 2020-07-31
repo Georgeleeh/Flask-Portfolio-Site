@@ -1,6 +1,7 @@
 import os
 import re
 import functools
+from datetime import datetime
 
 from app import app, db
 from app.models import Entry, Tag
@@ -90,6 +91,9 @@ def _create_or_edit(entry, template):
             entry.published = True if request.form.get('published') == 'y' else False
             entry.featured = True if request.form.get('featured') == 'y' else False
             entry.slug = re.sub(r'[^\w]+', '-', entry.title.lower()).strip('-')
+
+            if request.form.get('created') != "":
+                entry.timestamp = datetime.strptime(request.form.get('created'), '%d/%m/%Y at %H:%M')
 
             for tag in entry.tags:
                 if entry in tag.entries_associated.all():
