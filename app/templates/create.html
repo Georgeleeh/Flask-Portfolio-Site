@@ -18,7 +18,7 @@
       <select class="form-control" id="feature_image" name="feature_image" type="text" value="{{ entry.title }}">
         <option value=''>None</option>
         {% for image in images %}
-        <option value="/static/images/uploads/{{ image }}">{{ image }}</option>
+        <option {% if entry.feature_image.split("/")[-1] == image %} selected {% endif %} value="/static/images/uploads/{{ image }}">{{ image }}</option>
         {% endfor %}
       </select>
     </div>
@@ -59,4 +59,17 @@
     </div>
   </div>
 </form>
+
+<div style="padding-top: 2em;">
+  <h3>Markdown Cheat Sheet</h3>
+  <ul>
+    <li>Image Example: ![image](/static/images/uploads/Slow_Mo_Guys_2K.jpg)</li>
+    <li>
+      video width="400" height="400" controls
+        source src="/static/videos/IMG_0289.mov" type="video/mp4"
+        Your browser does not support the video tag.
+      /video
+    </li>
+  </ul>
+</div>
 {% endblock %}
