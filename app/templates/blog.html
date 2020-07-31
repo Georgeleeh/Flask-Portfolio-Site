@@ -13,10 +13,10 @@
 {% block content %}
 {% for entry in entry_list %}
 <div class="row" style="padding-top: 2em;">
-    <div class="col-sm-3">
+    <div class="col-sm-3 text-center">
         <a
             href="{% if entry.published %}{{ url_for('detail', slug=entry.slug) }}{% else %}{{ url_for('edit', slug=entry.slug) }}{% endif %}">
-            <img class="rounded img-thumbnail" src="{{ entry.feature_image }}" alt="{{ entry.feature_image }}">
+            <img class="rounded img-thumbnail" src="{{ entry.feature_image }}" style="height: 150px;" alt="{{ entry.feature_image }}">
         </a>
     </div>
     <div class="col-sm-6">
