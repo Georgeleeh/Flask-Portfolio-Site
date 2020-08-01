@@ -9,80 +9,80 @@
 {% block content_title %}Home{% endblock %}
 
 {% block content %}
-<div class="bg">
-    <div class="container-fluid" style="width: 1000px; padding-top: 3em;">
-        <div class="text-center bg-dark text-white rounded" style="padding: 1em;">
-            <h1>I’m George Harris and I’m a student of Electronic Engineering with Music Technology Systems</h1>
-            <br>
-            <br>
-            <p>
-                This site was built to present various projects I’ve worked on previously and document the creation of
-                upcoming projects.
-                You can check out some of my latest featured work below, go to the <i>Portfolio</i> page to see my
-                favourite completed projects or the <i>Blog page</i> to see what I'm working on right now!
-            </p>
-            <br>
-            <p>
-                The site as you see it now was built from scratch with Flask, a framework written for Python.
-                I'm terrible with visual design and very new to HTML so it might not be pretty but it's completely
-                handmade by me.
-                I'm even self-hosting the site on a Raspberry Pi!
-            </p>
-        </div>
-    </div>
 
-    {% if featured %}
-    <div class="container-fluid" style="width: 1000px; padding-top: 10em;">
-        <div class="text-center bg-dark text-white rounded" style="padding: 1em;">
+<div class="container-fluid" style="width: 1000px; padding-top: 3em;">
+    <div class="text-center bg-dark text-white rounded" style="padding: 1em;">
+        <h1>I’m George Harris and I’m a student of Electronic Engineering with Music Technology Systems</h1>
+        <br>
+        <br>
+        <p>
+            This site was built to present various projects I’ve worked on previously and document the creation of
+            upcoming projects.
+            You can check out some of my latest featured work below, go to the <i>Portfolio</i> page to see my
+            favourite completed projects or the <i>Blog page</i> to see what I'm working on right now!
+        </p>
+        <br>
+        <p>
+            The site as you see it now was built from scratch with Flask, a framework written for Python.
+            I'm terrible with visual design and very new to HTML so it might not be pretty but it's completely
+            handmade by me.
+            I'm even self-hosting the site on a Raspberry Pi!
+        </p>
+    </div>
+</div>
+
+{% if featured %}
+<div class="container" style="width: 1000px; padding-top: 10em;">
     <div>
-        <h3 class="text-center">Featured Posts</h3>
+        <h3 class="text-white text-center">Featured Posts</h3>
     </div>
 
-    <div class="container-fluid" style="height: 200px;">
-        <div class="row">
-            {% for i in range(len) %}
-            <div class="col text-center">
+    <div class="row">
+        {% for i in range(len) %}
+        <div class="col-lg-{{ 6 / len }}container" style="padding: 2em;">
+            <div class="card border-0 text-white text-center bg-dark">
                 <a href="{{ url_for('detail', slug=featured[i].slug) }}">
-                    <img class="rounded img-fluid" style="height: 150px;" src="{{ featured[i].feature_image }}"
+                    <img class="card-img-top img" style="height: 150px;" src="{{ featured[i].feature_image }}"
                         alt="{{ featured[i].feature_image }}">
                 </a>
-            </div>
-            {% endfor %}
-        </div>
 
-        <div class="row">
-            {% for i in range(len) %}
-            <div class="col">
-                <h4 class="text-center">
-                    <a href="{{ url_for('detail', slug=featured[i].slug) }}">
-                        {{ featured[i].title }}
-                    </a>
-                </h4>
-                <p class="text-center">Created {{ featured[i].timestamp.strftime('%d/%m/%Y at %H:%M') }}</p>
-            </div>
-            {% endfor %}
-        </div>
+                <div class="card-body">
+                    <h4>
+                        <a href="{{ url_for('detail', slug=featured[i].slug) }}">
+                            {{ featured[i].title }}
+                        </a>
+                    </h4>
 
-        <div class="row">
-            {% for i in range(len) %}
-            <div class="col">
-                <p class="text-center">
-                    {% for tag in featured[i].tags %}
-                    <a href="{{ url_for('tags', tag=tag.name ) }}">{{ tag.name }}</a>
-                    {% if not loop.last %}
-                    ,
-                    {% endif %}
-                    {% endfor %}
-                </p>
+                    <p>
+                        one liner goes here....
+                    </p>
+
+
+
+                    <p>
+                        {% for tag in featured[i].tags %}
+                        <a href="{{ url_for('tags', tag=tag.name ) }}">{{ tag.name }}</a>
+                        {% if not loop.last %}
+                        ,
+                        {% endif %}
+                        {% endfor %}
+                    </p>
+
+                    <p class="card-text"><small class="text-muted">Created
+                            {{ featured[i].timestamp.strftime('%d/%m/%Y at %H:%M') }}</small></p>
+
+                </div>
+
             </div>
-            {% endfor %}
         </div>
+        {% endfor %}
     </div>
+
 </div>
-</div>
-    {% else %}
-    <p>No entries have been created yet.</p>
-    {% endif %}
+
+{% else %}
+<p>No entries have been created yet.</p>
+{% endif %}
 
 </div>
 {% endblock %}
