@@ -2,9 +2,12 @@
 
 {% block title %}Create entry{% endblock %}
 
-{% block content_title %}Create entry{% endblock %}
-
 {% block content %}
+<div class="page-header col-sm-6" style="padding-bottom: 2em;">
+  <h1>Create Entry</h1>
+</div>
+
+
 <form action="{% block form_action %}{{ url_for('create') }}{% endblock %}" class="form-horizontal" method="post">
   <div class="form-group">
     <label for="title" class="col-sm-2 control-label">Title</label>
@@ -67,7 +70,7 @@
   </div>
 </form>
 
-<div style="padding-top: 2em;">
+<div class='col' style="padding-top: 2em;">
   <h3>Markdown Cheat Sheet</h3>
   <ul>
     <li>Image Example: ![image](/static/images/uploads/Slow_Mo_Guys_2K.jpg)</li>
