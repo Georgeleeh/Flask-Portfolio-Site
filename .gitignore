@@ -4,3 +4,4 @@ venv/
 *.db
 migrations/
 app/static/images/uploads/
+app/static/videos/
