@@ -2,6 +2,7 @@ import os
 import re
 import functools
 from datetime import datetime
+from pathlib import Path
 
 from app import app, db
 from app.models import Entry, Tag
@@ -183,10 +184,16 @@ def upload_image():
             flash('No selected file,', 'danger')
             return redirect(request.url)
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            flash('Image uploaded successfully.', 'success')
-            return redirect(url_for('index'))
+            # check if file exists
+            if file.filename in [name.name for name in Path(app.config['UPLOAD_FOLDER']).iterdir()]:
+                flash('Filename exists,', 'danger')
+                return redirect(request.url)
+            else:
+                
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                flash('Image uploaded successfully.', 'success')
+                return redirect(url_for('index'))
     return render_template('upload_image.html')
 
 @app.route('/image-gallery/')
