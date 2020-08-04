@@ -22,4 +22,4 @@ class Config(object):
 
     # File Upload
     UPLOAD_FOLDER = 'app/static/images/uploads/'
-    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'jfif', 'gif'}
