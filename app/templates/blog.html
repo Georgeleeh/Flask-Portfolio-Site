@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 
+{% block extra_head %}
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/moar.css') }}" />
+{% endblock %}
+
+{% block body_class %}bg-one{% endblock %}
+
 {% block extra_navbar_content %}
 <form class="form-inline">
     <input class="form-control mr-sm-2" name="q" type="search" placeholder="Search" aria-label="Search">
@@ -11,35 +17,40 @@
 {% block content_title %}{% if search %}Search "{{ search }}"{% else %}Blog entries{% endif %}{% endblock %}
 
 {% block content %}
+<div style="padding-top: 2em;">
 {% for entry in entry_list %}
-<div class="row" style="padding-top: 2em;">
-    <div class="col-sm-3 text-center">
-        <a
-            href="{% if entry.published %}{{ url_for('detail', slug=entry.slug) }}{% else %}{{ url_for('edit', slug=entry.slug) }}{% endif %}">
-            <img class="rounded img-thumbnail" src="{{ entry.feature_image }}" style="height: 150px;" alt="{{ entry.feature_image }}">
-        </a>
-    </div>
-    <div class="col-sm-6">
-        <h3>
+<div class="card">
+    <div class="row" style="padding: 0.5em;">
+        <div class="col-sm-3 text-center">
             <a
                 href="{% if entry.published %}{{ url_for('detail', slug=entry.slug) }}{% else %}{{ url_for('edit', slug=entry.slug) }}{% endif %}">
-                {{ entry.title }}
+                <img class="rounded img-thumbnail" src="{{ entry.feature_image }}" style="height: 150px;"
+                    alt="{{ entry.feature_image }}">
             </a>
-        </h3>
-        <p>Created {{ entry.timestamp.strftime('%d/%m/%Y at %H:%M') }}</p>
-    </div>
-    <div class="col-sm-3">
-        <p>
-            {% for tag in entry.tags %}
-            <a href="{{ url_for('tags', tag=tag.name ) }}">{{ tag.name }}</a>
-            {% if not loop.last %}
-            ,
-            {% endif %}
-            {% endfor %}
-        </p>
+        </div>
+        <div class="col-sm-6">
+            <h3>
+                <a
+                    href="{% if entry.published %}{{ url_for('detail', slug=entry.slug) }}{% else %}{{ url_for('edit', slug=entry.slug) }}{% endif %}">
+                    {{ entry.title }}
+                </a>
+            </h3>
+            <p>Created {{ entry.timestamp.strftime('%d/%m/%Y at %H:%M') }}</p>
+        </div>
+        <div class="col-sm-3">
+            <p>
+                {% for tag in entry.tags %}
+                <a href="{{ url_for('tags', tag=tag.name ) }}">{{ tag.name }}</a>
+                {% if not loop.last %}
+                ,
+                {% endif %}
+                {% endfor %}
+            </p>
+        </div>
     </div>
 </div>
 {% else %}
 <p>No entries have been created yet.</p>
 {% endfor %}
+</div>
 {% endblock %}
