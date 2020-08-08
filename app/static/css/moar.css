@@ -1,4 +1,9 @@
-.bg-one {
-    background-image: url("https://hdwallpaperim.com/wp-content/uploads/2017/08/22/319742-nebula-space-lake-evening-photo_manipulation-bridge-water.jpg");
+.bg-york-central-hall {
+    background-image: url('background_images/york-central-hall.jpg');
+    background-color: #cccccc;
+  }
+
+.bg-york-indie-gig {
+    background-image: url('background_images/york-indie-gig.jpg');
     background-color: #cccccc;
   }
