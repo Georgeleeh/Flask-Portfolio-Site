@@ -50,7 +50,7 @@
 
                 <div class="card-body">
                     <h4>
-                        <a href="{{ url_for('detail', slug=featured[i].slug) }}">
+                        <a class="text-white" href="{{ url_for('detail', slug=featured[i].slug) }}">
                             {{ featured[i].title }}
                         </a>
                     </h4>
@@ -63,7 +63,7 @@
 
                     <p>
                         {% for tag in featured[i].tags %}
-                        <a href="{{ url_for('tags', tag=tag.name ) }}">{{ tag.name }}</a>
+                        <a class="text-white" href="{{ url_for('tags', tag=tag.name ) }}">{{ tag.name }}</a>
                         {% if not loop.last %}
                         ,
                         {% endif %}
