@@ -89,6 +89,7 @@ def _create_or_edit(entry, template):
         button_value = request.form.get('button')
         if button_value == 'save':
             entry.title = request.form.get('title') or ''
+            entry.one_liner = request.form.get('one_liner') or ''
             entry.feature_image = request.form.get('feature_image') or ''
             entry.content = request.form.get('content') or ''
             entry.published = True if request.form.get('published') == 'y' else False

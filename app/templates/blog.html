@@ -33,7 +33,8 @@
                     {{ entry.title }}
                 </a>
             </h3>
-            <p>Created {{ entry.timestamp.strftime('%d/%m/%Y at %H:%M') }}</p>
+            <p class="card-text">{{ entry.one_liner }}</p>
+            <p class="text-muted">Created {{ entry.timestamp.strftime('%d/%m/%Y at %H:%M') }}</p>
         </div>
         <div class="col-sm-3">
             <p>

@@ -28,7 +28,7 @@
 <div style="padding-top: 1em;">
   <div class="card border-0 text-white bg-dark" style="padding: 0.5em;">
     <p class="col card-text">{{ entry.one_liner }}</p>
-    <p class="col card-text">
+    <p>
       {% for tag in tags %}
       <a class="text-white" href='#'>{{ tag }}</a>
       {% if not loop.last %}
@@ -36,6 +36,7 @@
       {% endif %}
       {% endfor %}
     </p>
+    <p class="text-muted">Created {{ entry.timestamp.strftime('%d/%m/%Y at %H:%M') }}</p>
   </div>
 </div>
 <div style="padding-top: 1em;">
