@@ -56,6 +56,8 @@ def blog():
     search_query = request.args.get('q')
     if search_query:
         found_tag = Tag.query.filter(Tag.name.like(search_query)).first()
+        if found_tag is None:
+            return render_template('blog.html')
         found_entries = found_tag.entries_associated.all()
         if session.get('logged_in'):
             return render_template('blog.html', entry_list=found_entries)
