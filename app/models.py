@@ -30,7 +30,7 @@ class Tag(db.Model):
 class Entry(db.Model):
     id=db.Column(db.Integer,primary_key=True)
     title=db.Column(db.String(50),nullable=False)
-    one_liner=db.Column(db.String(50),nullable=False)
+    one_liner=db.Column(db.String(50),nullable=True)
     content=db.Column(db.Text,nullable=False)
     feature_image=db.Column(db.String,nullable=True)
     timestamp=db.Column(db.DateTime, default=datetime.utcnow)
