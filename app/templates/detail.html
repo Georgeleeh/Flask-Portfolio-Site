@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}{{ entry.title }}{% endblock %}
-
-{% block feature_image %}
-<img class="img-fluid" src="{{ entry.feature_image }}" alt="{{ entry.feature_image }}">
+{% block extra_head %}
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/moar.css') }}" />
 {% endblock %}
+
+{% block body_class %}bg-typists{% endblock %}
+
+{% block title %}{{ entry.title }}{% endblock %}
 
 {% block content_title %}{{ entry.title }}{% endblock %}
 
@@ -17,14 +19,28 @@
 {% endblock %}
 
 {% block content %}
-<p>
-  {% for tag in tags %}
-  <a href='#'>{{ tag }}</a>
-  {% if not loop.last %}
-  ,
-  {% endif %}
-  {% endfor %}
-</p>
-<p>Created {{ entry.timestamp.strftime('%d/%m/%Y at %H:%M') }}</p>
-{{ entry.html_content }}
+<div style="padding-top: 1em;">
+  <div class="card border-0 text-white bg-dark mx-auto" style="padding: 0.5em; max-width: 800px;">
+<img class="card-img" src="{{ entry.feature_image }}" alt="{{ entry.feature_image }}">
+</div>
+</div>
+
+<div style="padding-top: 1em;">
+  <div class="card border-0 text-white bg-dark" style="padding: 0.5em;">
+    <p class="col card-text">
+      {% for tag in tags %}
+      <a class="text-white" href='#'>{{ tag }}</a>
+      {% if not loop.last %}
+      ,
+      {% endif %}
+      {% endfor %}
+    </p>
+    <p class="col card-text">Created {{ entry.timestamp.strftime('%d/%m/%Y at %H:%M') }}</p>
+  </div>
+</div>
+<div style="padding-top: 1em;">
+  <div class="card border-0 text-white bg-dark" style="padding: 0.5em;">
+    {{ entry.html_content }}
+  </div>
+</div>
 {% endblock %}
