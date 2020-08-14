@@ -42,9 +42,9 @@
     <div class="card-deck">
         {% for i in range(len) %}
         <div style="padding-top: 1em;">
-            <div class="card border-0 text-white text-center bg-dark">
+            <div class="card border-0 text-white text-center bg-dark" style="max-width: 300px;">
                 <a href="{{ url_for('detail', slug=featured[i].slug) }}">
-                    <img class="card-img-top img" style="height: 150px;" src="{{ featured[i].feature_image }}"
+                    <img class="card-img-top img" style="max-height: 150px;" src="{{ featured[i].feature_image }}"
                         alt="{{ featured[i].feature_image }}">
                 </a>
 
