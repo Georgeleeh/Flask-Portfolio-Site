@@ -160,7 +160,11 @@ def drafts():
 @app.route('/<slug>/')
 def detail(slug):
     entry = Entry.query.filter(Entry.slug.is_(slug)).first()
-    return render_template('detail.html', entry=entry, tags=[tag.name for tag in entry.tags])
+
+    if entry:
+        return render_template('detail.html', entry=entry, tags=[tag.name for tag in entry.tags])
+    else:
+        return render_template('detail.html')
 
 @app.route('/<slug>/edit/', methods=['GET', 'POST'])
 @login_required
