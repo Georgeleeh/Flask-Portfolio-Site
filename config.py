@@ -26,3 +26,6 @@ class Config(object):
 
     # site map
     SITEMAP_INCLUDE_RULES_WITHOUT_PARAMS=True
+
+    STATIC_FOLDER = 'static'
+    TEMPLATES_FOLDER = 'templates'
