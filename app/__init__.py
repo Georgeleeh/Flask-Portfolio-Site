@@ -7,9 +7,13 @@ from micawber.cache import Cache as OEmbedCache
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
+from flask_sitemap import Sitemap
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
+
+ext = Sitemap(app=app)
 
 # DB
 db = SQLAlchemy()

@@ -23,3 +23,6 @@ class Config(object):
     # File Upload
     UPLOAD_FOLDER = 'app/static/images/uploads/'
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'jfif', 'gif'}
+
+    # site map
+    SITEMAP_INCLUDE_RULES_WITHOUT_PARAMS=True
